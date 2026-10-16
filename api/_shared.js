@@ -43,6 +43,9 @@ export async function sendPush(sub, payload) {
 // --- verifica del token OIDC di GitHub Actions (il promemoria parte da un workflow pianificato) ---
 let jwks = null, jwksAt = 0;
 export async function verifyGithubOidc(token, repo, audience) {
+  try { return await checkOidc(token, repo, audience); } catch { return false; }
+}
+async function checkOidc(token, repo, audience) {
   const [hd, pl, sg] = String(token || "").split(".");
   if (!hd || !pl || !sg) return false;
   const header = JSON.parse(Buffer.from(hd, "base64url").toString());
