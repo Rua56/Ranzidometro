@@ -2,5 +2,8 @@
   "name": "ranzidometro",
   "private": true,
   "type": "module",
-  "dependencies": { "@vercel/blob": "2.8.2" }
+  "dependencies": {
+    "@vercel/blob": "2.8.2",
+    "web-push": "3.6.7"
+  }
 }

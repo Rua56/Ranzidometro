@@ -1,0 +1,19 @@
+# Ogni mezz'ora chiede al sito di mandare i promemoria della sera a chi ha le notifiche attive.
+# Il sito verifica che la richiesta arrivi davvero da questo repository (token OIDC di GitHub).
+name: Promemoria
+on:
+  schedule:
+    - cron: "3,33 * * * *"
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  promemoria:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Manda i promemoria in scadenza
+        run: |
+          TOKEN=$(curl -fsS -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=ranzidometro" | jq -r .value)
+          curl -fsS -X POST "https://ranzidometro.vercel.app/api/push?kind=cron" -H "Authorization: Bearer $TOKEN"
