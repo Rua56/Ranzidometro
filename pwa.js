@@ -275,8 +275,20 @@
   setTimeout(() => handleParams(new URLSearchParams(location.search)), 400);
 
   // ---------------- agganci per l'app ----------------
+  // chiede al telefono di non cancellare mai i dati dell'app per fare spazio
+  const persist = () => { if (LS("ranzi-persist")) return; try { navigator.storage && navigator.storage.persist && navigator.storage.persist().then(ok => { if (ok) LS("ranzi-persist", 1); }); } catch {} };
+  async function wipeOnline() {
+    if (push.on) { try { const reg = await navigator.serviceWorker.ready; const sub = await reg.pushManager.getSubscription(); if (sub) await sub.unsubscribe(); } catch {} }
+    try { await post(PUSH, { op: "unsub", secret: dev.secret }); } catch {}
+    try { await call({ op: "del", kind: "couples" }); } catch {}
+    if (cloud) { const c = cloud; cloud = null; try { const { id } = await keysFor(c.phrase); await post(BK, { op: "wipe", id }); } catch {} }
+    ["ranzi-cloud", "ranzi-push", "ranzi-device", "ranzi-persist", "ranzi-install-hide"].forEach(k => LS(k, null));
+  }
   window.ranziExt = {
-    changed(kind, k) { if (kind === "entry" && k === todayKey()) pushSync(); if (kind === "profile") pushSync(); markDirty(); },
+    changed(kind, k) { if (kind === "entry") persist(); if (kind === "entry" && k === todayKey()) pushSync(); if (kind === "profile") pushSync(); markDirty(); },
+    wipe: wipeOnline,
+    wipeWhat: () => ", backup nel cloud, notifiche",
+    privacy: () => `<p><a href="/privacy.html" target="_blank" rel="noopener">Leggi l'informativa sulla privacy completa</a></p>`,
     pushActive: () => push.on && pushOk && Notification.permission === "granted",
     invite: () => `<button class="btn" id="invite">${icon("heart")} Invita con un link</button>`,
     pasteBtn: () => navigator.clipboard && navigator.clipboard.readText ? `<button class="btn ghost" id="pastecode">Incolla</button>` : "",

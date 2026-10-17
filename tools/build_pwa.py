@@ -14,6 +14,8 @@ rep("Le notifiche sul telefono arrivano con l'app installata.", "Con le notifich
 rep("""      ${state.profile.remind ? `<button class="btn ghost" id="remindoff" style="align-self:flex-start">Togli il promemoria</button>` : ""}""",
     """      ${state.profile.remind ? `<div class="btnrow">${ext("pushActive") ? "" : `<button class="btn ghost" id="remindics">${icon("calendar")} Aggiungi al calendario</button>`}<button class="btn ghost" id="remindoff">Togli il promemoria</button></div>` : ""}""")
 rep('<meta name="claude:viewport-fit-sides" content="cover">\n', "")
+# caratteri ospitati sul sito: funzionano offline e il telefono non contatta Google
+rep('<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Nunito:wght@400;600;700;800&display=swap">\n', "<style>\n" + open("fonts/fonts.css", encoding="utf-8").read() + "</style>\n")
 i = s.index("</style>") + len("</style>")
 head, body = s[:i], s[i:]
 extra_css = """<style>

@@ -2,11 +2,15 @@
   "id": "/",
   "name": "Ranzidometro",
   "short_name": "Ranzidometro",
-  "description": "Il check-in quotidiano dell'umore: quanto sei up, quanto sei down e quanto pepe hai in corpo.",
+  "description": "Il check-in quotidiano dell'umore: rispondi a qualche domanda e Ranzi ti dice quanto sei up, quanto sei down e quanto pepe hai in corpo. Con modalità coppia, sticker e verdetto di fine mese.",
   "lang": "it",
+  "dir": "ltr",
   "start_url": "/?src=app",
   "scope": "/",
   "display": "standalone",
+  "display_override": [
+    "standalone"
+  ],
   "orientation": "portrait",
   "background_color": "#eef3f4",
   "theme_color": "#eef3f4",
@@ -14,6 +18,7 @@
     "lifestyle",
     "health"
   ],
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "/icons/icon-192.png",
@@ -32,6 +37,50 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/schermata-1-checkin.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Il check-in del giorno, con le domande a carte"
+    },
+    {
+      "src": "/screenshots/schermata-2-risultato.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Il risultato: umore e ranzidità"
+    },
+    {
+      "src": "/screenshots/schermata-3-mese.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Il verdetto del mese"
+    },
+    {
+      "src": "/screenshots/schermata-4-coppia.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Indovina l'umore del partner"
+    },
+    {
+      "src": "/screenshots/schermata-5-sticker.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Gli sticker di Ranzi"
+    },
+    {
+      "src": "/screenshots/schermata-6-drago.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Il minigioco Calma il drago"
     }
   ],
   "shortcuts": [

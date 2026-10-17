@@ -61,6 +61,8 @@ export default async function handler(req, res) {
       if (s && s.sub) await sendPush(s.sub, { title: `${hug.from || "Il tuo partner"} ti ha mandato ${hug.kind} ${hug.e}`, body: "Apri il Ranzidometro per ricambiare.", tag: "coccola", url: "/?da=coccola" });
       return res.status(200).json({ ok: true });
     }
+    // la coccola ricevuta si cancella insieme alla coppia (op "del" di couples)
+    if (b.kind === "hugs" && b.op === "del") return res.status(200).json({ ok: true });
     return res.status(400).json({ error: "bad" });
   } catch (e) {
     console.error(e);

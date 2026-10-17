@@ -1,6 +1,6 @@
 // Ranzidometro service worker: app disponibile anche senza internet.
 const V = "ranzi-__VERSION__";
-const CORE = ["/", "/pwa.js?v=__VERSION__", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/icon-512.png", "/icons/apple-touch-icon.png"];
+const CORE = ["/", "/pwa.js?v=__VERSION__", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/icon-512.png", "/icons/apple-touch-icon.png", "/privacy.html", "/fonts/fonts.css", "/fonts/bagel-latin-5cf04e.woff2", "/fonts/bagel-latin-ext-a59240.woff2", "/fonts/nunito-latin-ext-9abf3b.woff2", "/fonts/nunito-latin-ff573f.woff2"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(V).then(c => c.addAll(CORE)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== V && k !== "ranzi-fonts").map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener("fetch", e => {

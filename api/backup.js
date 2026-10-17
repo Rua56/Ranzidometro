@@ -1,6 +1,6 @@
 // Ranzidometro: backup nel cloud. Il telefono cifra tutto con la parola segreta prima di mandarlo:
 // qui arrivano solo dati illeggibili, salvati sotto un nome ricavato anch'esso dalla parola segreta.
-import { del } from "@vercel/blob";
+import { del, list } from "@vercel/blob";
 import { readJson, write, h, body } from "./_shared.js";
 
 const ID = /^[0-9a-f]{64}$/;
@@ -21,6 +21,12 @@ export default async function handler(req, res) {
     const b = body(req);
     const { id, part = "main", date } = b;
     if (!ID.test(id || "") || (part === "p" && !DATE.test(date || ""))) return res.status(400).json({ error: "bad" });
+    // cancellazione completa: il backup e tutte le sue foto
+    if (b.op === "wipe") {
+      const prefix = `backup/${h("bk|" + id)}/`; let cursor;
+      do { const r = await list({ prefix, cursor, limit: 1000 }); if (r.blobs.length) await del(r.blobs.map(x => x.url)); cursor = r.hasMore ? r.cursor : undefined; } while (cursor);
+      return res.status(200).json({ ok: true });
+    }
     if (b.op === "del") { if (part === "p") await del(pathOf(id, part, date)).catch(() => {}); return res.status(200).json({ ok: true }); }
     const data = String(b.data || "");
     if (!BLOB.test(data) || data.length > (part === "p" ? 600000 : 1500000)) return res.status(413).json({ error: "size" });

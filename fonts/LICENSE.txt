@@ -1,0 +1,3 @@
+Caratteri inclusi nell'app: Bagel Fat One e Nunito, entrambi sotto SIL Open Font License 1.1.
+Testo della licenza e autori: https://fonts.google.com/specimen/Bagel+Fat+One/license e https://fonts.google.com/specimen/Nunito/license
+I file sono ripresi da Google Fonts senza modifiche (solo i sottoinsiemi latin e latin-ext).
