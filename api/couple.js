@@ -1,5 +1,5 @@
 // Ranzidometro: modalità coppia per la versione installabile.
-// Conserva solo il "meteo" condiviso (livello e ranzidità) e l'ultima coccola ricevuta, in un Blob store privato.
+// Conserva solo il "meteo" condiviso (livello e ranzidità), il punteggio di "Indovina l'umore" e l'ultima coccola ricevuta, in un Blob store privato.
 import { del } from "@vercel/blob";
 import { h, ownOf, clip, readJson, write, sendPush, PUSH_INDEX } from "./_shared.js";
 
@@ -36,7 +36,8 @@ export default async function handler(req, res) {
       const path = `couples/${h(c)}.json`; const cur = await readJson(path, true);
       if (cur && cur.own !== own) return res.status(409).json({ error: "taken" });
       const week = Array.isArray(d.week) ? d.week.slice(0, 7).filter(x => x && typeof x === "object").map(x => ({ d: clip(x.d, 10), m: num(x.m), r: num(x.r) })) : [];
-      await write(path, { own, code: c, name: clip(d.name, 30), gen: d.gen === "o" ? "o" : "a", date: clip(d.date, 10), mood: num(d.mood), ranz: num(d.ranz), week, chal: clip(d.chal, 10), updated: Date.now() });
+      const gs = d.gs && typeof d.gs === "object" ? { w: clip(d.gs.w, 10), n: Math.min(7, num(d.gs.n)), t: Math.min(7, num(d.gs.t)) } : null;
+      await write(path, { own, code: c, name: clip(d.name, 30), gen: d.gen === "o" ? "o" : "a", date: clip(d.date, 10), mood: num(d.mood), ranz: num(d.ranz), week, chal: clip(d.chal, 10), gs, updated: Date.now() });
       const prev = await readJson(`owners/${own}.json`, true);
       if (prev && prev.code && prev.code !== c) { await del(`couples/${h(prev.code)}.json`).catch(() => {}); await del(`hugs/${h(prev.code)}.json`).catch(() => {}); }
       if (!prev || prev.code !== c) await write(`owners/${own}.json`, { code: c });
